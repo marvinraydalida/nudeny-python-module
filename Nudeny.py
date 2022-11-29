@@ -7,6 +7,41 @@ import validators
 import uuid
 
 
+class Clasify:
+    def __init__(self):
+        self.URL = "http://127.0.0.1:8000/"
+
+    def imageClassify(self, paths=[]):
+        files = []
+        for path in paths:
+            if not os.path.exists(path):
+                raise Exception("Path provided does not exists.")
+            files.append(('files', open(path, 'rb')))
+
+        response = requests.post(
+            url=self.URL+"classify/", files=files).json()
+
+        return response
+
+    def imageClassifyUrl(self, urls=[]):
+        json = []
+
+        for url in urls:
+            if not validators.url(url):
+                raise Exception("URL provided is not valid.")
+            image = urlopen(url)
+            extension = str(image.headers.get_content_type()).split('/')[1]
+            json.append({
+                "filename": str(uuid.uuid4()) + "." + extension,
+                "url": url
+            })
+
+        response = requests.post(
+            url=self.URL+"classifyUrl/", json=json).json()
+
+        return response
+
+
 class Detect:
 
     def __init__(self):
