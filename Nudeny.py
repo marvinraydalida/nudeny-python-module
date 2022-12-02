@@ -1,7 +1,7 @@
 import requests
 import os
 from PIL import Image
-from urllib.request import urlopen
+#from urllib.request import urlopen
 from urllib.parse import urlparse
 import validators
 import uuid
@@ -29,8 +29,11 @@ class Clasify:
         for url in urls:
             if not validators.url(url):
                 raise Exception("URL provided is not valid.")
-            image = urlopen(url)
-            extension = str(image.headers.get_content_type()).split('/')[1]
+            #image = urlopen(url)
+
+            content_type = requests.get(url).headers['content-type']
+            extension = str(content_type).split('/')[1]
+            
             json.append({
                 "filename": str(uuid.uuid4()) + "." + extension,
                 "url": url
@@ -101,8 +104,13 @@ class Detect:
         for url in urls:
             if not validators.url(url):
                 raise Exception("URL provided is not valid.")
-            image = urlopen(url)
-            extension = str(image.headers.get_content_type()).split('/')[1]
+
+            #image = urlopen(url)
+            #extension = str(image.headers.get_content_type()).split('/')[1]
+
+            content_type = requests.get(url).headers['content-type']
+            extension = str(content_type).split('/')[1]
+
             json.append({
                 "filename": str(uuid.uuid4()) + "." + extension,
                 "url": url
@@ -125,8 +133,12 @@ class Detect:
         for url in urls:
             if not validators.url(url):
                 raise Exception("URL provided is not valid.")
-            image = urlopen(url)
-            extension = str(image.headers.get_content_type()).split('/')[1]
+            # image = urlopen(url)
+            # extension = str(image.headers.get_content_type()).split('/')[1]
+
+            content_type = requests.get(url).headers['content-type']
+            extension = str(content_type).split('/')[1]
+
             json.append({
                 "filename": str(uuid.uuid4()) + "." + extension,
                 "url": url
